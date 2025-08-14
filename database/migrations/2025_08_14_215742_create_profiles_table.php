@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sdn_aliases', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sdn_id')->constrained('sdns')->onDelete('cascade');
-            $table->string('alias_type')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('whole_name');
+            $table->string('profile_id')->unique()->comment('ID from the XML <Profile> node');
+            $table->string('party_sub_type_id')->nullable()->comment('Type of entity (e.g., Individual, Entity)');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sdn_aliases');
+        Schema::dropIfExists('profiles');
     }
 };

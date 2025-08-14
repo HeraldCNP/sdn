@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sdns', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->integer('uid')->unique();
-            $table->string('sdn_name');
-            $table->string('sdn_type')->nullable();
-            $table->string('program')->nullable();
-            $table->text('remarks')->nullable();
+            $table->string('feature_id')->unique();
+            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
+            $table->string('feature_type_id')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sdns');
+        Schema::dropIfExists('features');
     }
 };
