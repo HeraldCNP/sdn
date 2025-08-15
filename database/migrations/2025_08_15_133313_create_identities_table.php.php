@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('identities', function (Blueprint $table) {
-            $table->id();
-            $table->string('identity_id')->unique();
-            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
-            $table->boolean('is_primary')->default(false);
-            $table->boolean('is_false')->default(false)->nullable();
-            $table->string('fixed_ref')->nullable();
-            $table->timestamps();
+            $table->integer('ID')->primary();
+            $table->integer('FixedRef');
+            $table->boolean('Primary_')->nullable();
+            $table->boolean('False_')->nullable();
+            $table->integer('ProfileID');
+
+            $table->foreign('FixedRef')->references('FixedRef')->on('distinct_parties');
+            $table->foreign('ProfileID')->references('ID')->on('profiles');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('identities');
+        //
     }
 };

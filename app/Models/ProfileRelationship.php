@@ -2,20 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProfileRelationship extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'profile_relationship_id',
-        'from_profile_id',
-        'to_profile_id',
-        'relation_type_id',
-        'relation_quality_id',
-        'former',
-        'sanctions_entry_id',
+    protected $table = 'profile_relationships';
+    protected $primaryKey = 'ID';
+    public $incrementing = false;
+    public $timestamps = false;
+    protected $fillable = ['ID', 'FromProfileID', 'ToProfileID', 'RelationTypeID', 'RelationQualityID', 'Former', 'SanctionsEntryID', 'Comment'];
+    protected $casts = [
+        'Former' => 'boolean',
     ];
+
+    public function fromProfile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class, 'FromProfileID');
+    }
+
+    public function toProfile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class, 'ToProfileID');
+    }
 }

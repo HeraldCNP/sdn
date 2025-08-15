@@ -2,31 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Profile extends Model
 {
-    use HasFactory;
+    protected $table = 'profiles';
+    protected $primaryKey = 'ID';
+    public $incrementing = false;
+    public $timestamps = false;
+    protected $fillable = ['ID', 'PartySubTypeID', 'FixedRef'];
 
-    protected $fillable = [
-        'profile_id',
-        'party_sub_type_id',
-    ];
-
-    public function identities(): HasMany
+    public function distinctParty(): BelongsTo
     {
-        return $this->hasMany(Identity::class);
+        return $this->belongsTo(DistinctParty::class, 'FixedRef', 'FixedRef');
     }
 
-    public function features(): HasMany
+    public function identities()
+
     {
-        return $this->hasMany(Feature::class);
+        return $this->hasMany(Identity::class, 'ProfileID');
     }
 
-    public function sanctionsEntries(): HasMany
+    public function fromProfileRelationships(): HasMany
     {
-        return $this->hasMany(SanctionsEntry::class);
+        return $this->hasMany(ProfileRelationship::class, 'FromProfileID');
+    }
+
+    public function toProfileRelationships(): HasMany
+    {
+        return $this->hasMany(ProfileRelationship::class, 'ToProfileID');
     }
 }

@@ -2,30 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Identity extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'identity_id',
-        'profile_id',
-        'is_primary',
-        'is_false',
-        'fixed_ref',
+    protected $table = 'identities';
+    protected $primaryKey = 'ID';
+    public $incrementing = false;
+    public $timestamps = false;
+    protected $fillable = ['ID', 'FixedRef', 'Primary_', 'False_', 'ProfileID'];
+    protected $casts = [
+        'Primary_' => 'boolean',
+        'False_' => 'boolean',
     ];
 
     public function profile(): BelongsTo
     {
-        return $this->belongsTo(Profile::class);
+        return $this->belongsTo(Profile::class, 'ProfileID');
     }
 
-    public function aliases(): HasMany
+    public function documentedNames(): HasMany
     {
-        return $this->hasMany(Alias::class);
+        return $this->hasMany(DocumentedName::class, 'FixedRef', 'FixedRef');
+    }
+
+    public function namePartGroups(): HasMany
+    {
+        return $this->hasMany(NamePartGroup::class, 'IdentityID');
     }
 }

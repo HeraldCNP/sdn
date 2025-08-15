@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('profiles', function (Blueprint $table) {
-            $table->id();
-            $table->string('profile_id')->unique()->comment('ID from the XML <Profile> node');
-            $table->string('party_sub_type_id')->nullable()->comment('Type of entity (e.g., Individual, Entity)');
-            $table->timestamps();
+            $table->integer('ID')->primary();
+            $table->integer('PartySubTypeID')->nullable();
+            $table->integer('FixedRef');
+
+            $table->foreign('FixedRef')->references('FixedRef')->on('distinct_parties');
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profiles');
+        //
     }
 };
